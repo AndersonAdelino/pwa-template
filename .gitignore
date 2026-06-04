@@ -1,0 +1,49 @@
+# env
+.env
+.env.local
+.env*.local
+src/.env
+src/.env.local
+src/.env*.local
+
+# node
+node_modules/
+src/node_modules/
+.pnp
+.pnp.js
+
+# next
+.next/
+src/.next/
+out/
+src/out/
+build/
+src/build/
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# vercel
+.vercel
+src/.vercel
+
+# misc
+.DS_Store
+*.pem
+.idea/
+.vscode/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# testing
+coverage/
+src/coverage/
+
+# claude
+.claude/cache/
+.claude/file-history/
+.claude/sessions/
+.claude/projects/
