@@ -1,4 +1,4 @@
-# PWA Template — Pipeline de 5 Fases
+# PWA Template — Pipeline de 5 Fases (Skills-only)
 
 Template reutilizável para apps PWA com Next.js + Supabase + Vercel. Copie esta pasta para qualquer projeto novo e ajuste apenas `PROJECT.md` + `.mcp.json` + `.env.example`.
 
@@ -7,39 +7,38 @@ Template reutilizável para apps PWA com Next.js + Supabase + Vercel. Copie esta
 **Nome:** _[preencher após Fase 1]_
 **Stack:** Next.js 14 · Supabase · Tailwind · Vercel · PWA
 
+## Arquitetura — apenas Skills
+
+Sem subagents, sem slash commands. Cada fase = 1 Skill auto-contida. Você (orquestrador, neste chat) invoca a Skill quando o usuário pedir aquela fase. Fluxo recomendado: **uma sessão separada por fase** para economizar contexto/tokens.
+
+```
+Orchestrator (eu, neste chat)
+├── Skill `pm`       → Fase 1: PRD + wireframe lo-fi
+├── Skill `designer` → Fase 2: Hi-Fi design + design system
+├── Skill `engineer` → Fase 3: Supabase + Next.js + PWA
+├── Skill `qa`       → Fase 4: testes em browser real (Chrome DevTools MCP)
+└── Skill `security` → Fase 5: review + OWASP + deploy GitHub + Vercel
+```
+
 ## Pipeline
 
-| Fase | Slash command | Subagent | Skills invocadas |
-|------|---------------|----------|------------------|
-| 1 — Product Manager | `/pm` | `product-manager` | `write-prd` → `generate-wireframes` |
-| 2 — UI/UX Designer | `/designer` | `designer` | `create-ui-design` |
-| 3 — Software Engineer | `/engineer` | `engineer` | `setup-supabase` → `implement-frontend` |
-| 4 — QA Engineer | `/qa` | `qa` | `run-qa-tests` |
-| 5 — Security Engineer | `/security` | `security` | `review-code` → `security-audit` → `deploy-vercel` |
+| Fase | Skill | O que produz |
+|------|-------|--------------|
+| 1 — Product Manager | `pm` | `prd.md` + `wireframes/wireframe.html` (lo-fi sketch) |
+| 2 — UI/UX Designer | `designer` | `designs/design.html` (hi-fi + design system aprovado) |
+| 3 — Software Engineer | `engineer` | Supabase backend + `src/` (Next.js + Tailwind + PWA) |
+| 4 — QA Engineer | `qa` | App validado, bugs corrigidos, relatório em `PROJECT.md` |
+| 5 — Security Engineer | `security` | Auditoria OWASP + repo GitHub privado + deploy Vercel |
 
 ## Regras Globais
 
 - Sempre ler `PROJECT.md` antes de agir em qualquer fase
-- Saídas ao usuário em português brasileiro (pt-BR) — código, identificadores, paths em inglês
-- Commits e repositórios via `gh` CLI; privados por padrão (regra global do usuário em `~/.claude/CLAUDE.md`)
+- Saídas ao usuário em pt-BR — código, identificadores, paths em inglês
+- Commits e repositórios via `gh` CLI; privados por padrão (regra global em `~/.claude/CLAUDE.md`)
 - TypeScript strict em todo código de produção
-- Cada subagent atualiza `PROJECT.md` ao concluir sua fase
+- Cada Skill atualiza `PROJECT.md` ao concluir sua fase
 - `tsc --noEmit` e `eslint --max-warnings 0` obrigatórios antes de qualquer commit ou avanço de fase
-
-## Arquitetura — Orchestrator, Agents, Skills
-
-- **Orchestrator:** este chat (Claude principal). Lê `PROJECT.md`, identifica fase atual, sugere ou executa o slash command correto.
-- **Subagents (`.claude/agents/`):** 5 papéis especializados, contexto isolado, modelo Sonnet 4.6. Invocados via slash commands ou pelo Agent tool.
-- **Skills (`.claude/skills/`):** 9 ferramentas atômicas, invocadas pelos subagents via Skill tool.
-
-```
-Orchestrator (eu)
-├── /pm → product-manager → write-prd, generate-wireframes
-├── /designer → designer → create-ui-design
-├── /engineer → engineer → setup-supabase, implement-frontend
-├── /qa → qa → run-qa-tests
-└── /security → security → review-code, security-audit, deploy-vercel
-```
+- **Sessões separadas por fase** para reduzir consumo de tokens — abra novo chat ao passar de fase
 
 ## Artefatos Gerados por Fase
 
@@ -63,4 +62,4 @@ _[preencher conforme o projeto avança]_
 1. Copiar `.claude/`, `CLAUDE.md`, `PROJECT.md`, `.gitignore`, `.env.example`, `.mcp.json` para a nova pasta
 2. Editar `.mcp.json` — substituir `<SUPABASE_PROJECT_REF>` pelo project_ref real do Supabase
 3. `git init && git add . && git commit -m "init pwa template"`
-4. Rodar `/pm [descrição do app]` para iniciar a Fase 1
+4. Em um chat novo, pedir: "começa a Fase 1: [descrição do app]" — o orquestrador invoca a Skill `pm`
